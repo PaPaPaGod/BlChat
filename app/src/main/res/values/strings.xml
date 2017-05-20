@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BlChat</string>
+    <string name="btn_search_device">Search Device</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="BT_IS_NOT_AVAILABLE">Bluetooth is not available</string>
+    <string name="search">Searching...</string>
+</resources>
