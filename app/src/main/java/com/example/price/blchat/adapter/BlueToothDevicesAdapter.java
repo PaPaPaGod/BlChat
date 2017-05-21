@@ -57,7 +57,7 @@ public class BlueToothDevicesAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View view) {
                 if(listener!=null){
-                    listener.onClick(holder.getLayoutPosition());
+                    listener.onItemClick(holder.getLayoutPosition());
                 }
             }
         });
@@ -80,6 +80,6 @@ public class BlueToothDevicesAdapter extends RecyclerView.Adapter {
     }
 
     public interface BLDeviceOnClickListener{
-        void onClick(int position);
+        void onItemClick(int position);
     }
 }

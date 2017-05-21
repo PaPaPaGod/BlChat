@@ -6,6 +6,10 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 
 
+import com.example.price.blchat.thread.AcceptThread;
+import com.example.price.blchat.thread.ConnectThread;
+import com.example.price.blchat.thread.ConnectedThread;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -15,75 +19,50 @@ import java.util.UUID;
 
 public class BluetoothUtils {
 
+    private static BluetoothUtils mUtils = new BluetoothUtils();
+
+    public static BluetoothUtils getInstance() {
+        if(mUtils == null){
+            mUtils = new BluetoothUtils();
+        }
+        return mUtils;
+    }
 
     private BluetoothAdapter mAdapter;
 
-    private Thread connectThread;
-    private Thread connectedThread;
-    private Thread acceptThread;
-
-    private ConnectThread connectRunable;
+    private ConnectThread connectThread;
+    private ConnectedThread connectedThread;
+    private AcceptThread acceptThread;
 
     public BluetoothUtils() {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
 
-    class ConnectThread implements Runnable{
-        private BluetoothDevice mmDevice;
-        private BluetoothSocket mmSocket;
-
-        public ConnectThread(BluetoothDevice mmDevice) {
-            this.mmDevice = mmDevice;
-            try {
-                mmSocket = mmDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString(UUID.randomUUID().toString()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-            mAdapter.cancelDiscovery();
-            try {
-                mmSocket.connect();
-            } catch (IOException e) {
-                try {
-                    mmSocket.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-                return;
-            }
-            synchronized (BluetoothUtils.class){
-                connectThread = null;
-            }
-            connected(mmSocket);
-        }
-
-        public void cancel(){
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-    }
-
-    private void connected(BluetoothSocket mmSocket) {
+    public void connect(BluetoothDevice mmDevice){
         if(connectThread!=null){
-            connectThread.;
+            connectThread.cancel();
+            connectThread = null;
         }
+        connectThread = new ConnectThread(mmDevice);
+        connectThread.setConnectedListener(new ConnectThread.ConnectedListener() {
+            @Override
+            public void connected(BluetoothSocket mmSocket) {
+                connected(mmSocket);
+            }
+
+            @Override
+            public void clear() {
+                synchronized (BluetoothUtils.class){
+                    connectThread = null;
+                }
+            }
+        });
+        connectThread.start();
     }
 
-    class ConnectedThread implements Runnable{
+    public void accept(){
 
-        @Override
-        public void run() {
-
-        }
     }
+
 }

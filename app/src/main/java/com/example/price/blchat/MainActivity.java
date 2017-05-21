@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.price.blchat.adapter.BlueToothDevicesAdapter;
 import com.example.price.blchat.adapter.item.BlueToothDeviceItem;
 import com.example.price.blchat.broadcastreceiver.BlueToothReceiver;
+import com.example.price.blchat.utils.BluetoothUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +49,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private List<BlueToothDeviceItem> mDevicesItem;
     private List<BluetoothDevice> mDevices;
 
+    private BluetoothUtils mUtils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mUtils = BluetoothUtils.getInstance();
         initView();
         checkBlueToothAdapter();
     }
@@ -173,8 +177,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(int position) {
-        Toast.makeText(this,mDevices.get(position).getAddress(),Toast.LENGTH_SHORT).show();
+    public void onItemClick(int position) {
+        // Get the device MAC address
+        String address = mDevices.get(position).getAddress();
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mDevices.get(position);
+        mUtils.connect(device);
+
     }
 
     private void setBlVisible(){
