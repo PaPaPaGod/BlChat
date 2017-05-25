@@ -1,12 +1,13 @@
-package com.example.price.blchat;
+package com.example.price.blchat.view;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,18 +16,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.example.price.blchat.BluetoothChatService;
+import com.example.price.blchat.R;
 import com.example.price.blchat.adapter.BlueToothDevicesAdapter;
-import com.example.price.blchat.adapter.item.BlueToothDeviceItem;
 import com.example.price.blchat.broadcastreceiver.BlueToothReceiver;
 import com.example.price.blchat.utils.BluetoothUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, BlueToothReceiver.SearchBlueToothListener, BlueToothDevicesAdapter.BLDeviceOnClickListener {
 
@@ -45,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private BlueToothReceiver receiver;
 
+
     private BlueToothDevicesAdapter mAdapter;
 //    private List<BlueToothDeviceItem> mDevicesItem;
     private List<BluetoothDevice> mDevices;
 
     private BluetoothUtils mUtils;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!bluetoothAdapter.isEnabled()){
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
-        }else if(mChatService == null){
-            setupChat();
+        }else if(mUtils == null){
+//            setupChat();
+            mUtils = BluetoothUtils.getInstance();
         }
     }
 
@@ -113,26 +113,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_search:
-
-//                    ProgressDialog progressDialog = new ProgressDialog(this);
-//                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//                    progressDialog.setMessage(getResources().getString(R.string.search));
-//                    progressDialog.setCancelable(true);
-//                    progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                        @Override
-//                        public void onCancel(DialogInterface dialogInterface) {
-//
-//                        }
-//                    });
-//                    progressDialog.show();
-                    boolean isDiscovery = bluetoothAdapter.startDiscovery();
-                    if(isDiscovery){
-                        Log.e(TAG,"dicoverying...");
-                        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                        receiver = new BlueToothReceiver();
-                        receiver.setListener(this);
-                        registerReceiver(receiver,intentFilter);
-                    }
+                boolean isDiscovery = bluetoothAdapter.startDiscovery();
+                if(isDiscovery){
+                    Log.e(TAG,"dicoverying...");
+                    IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                    receiver = new BlueToothReceiver();
+                    receiver.setListener(this);
+                    registerReceiver(receiver,intentFilter);
+                }
                 break;
         }
     }
@@ -183,9 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Get the BluetoothDevice object
         BluetoothDevice device = mDevices.get(position);
         mUtils.connect(device);
-
+        Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("device_name",device.getName());
+        startActivity(intent);
     }
 
+    //set device visible
     private void setBlVisible(){
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);

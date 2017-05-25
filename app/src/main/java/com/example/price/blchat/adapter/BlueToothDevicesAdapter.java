@@ -53,6 +53,7 @@ public class BlueToothDevicesAdapter extends RecyclerView.Adapter {
         }else{
             viewHolder.tv_device_name.setText(mDevices.get(position).getName());
         }
+        viewHolder.tv_device_mac.setText(mDevices.get(position).getAddress());
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,11 +72,13 @@ public class BlueToothDevicesAdapter extends RecyclerView.Adapter {
 
     class BLDeviceViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tv_device_name;
+        private TextView tv_device_name;
+        private TextView tv_device_mac;
 
         public BLDeviceViewHolder(View itemView) {
             super(itemView);
             tv_device_name = (TextView) itemView.findViewById(R.id.item_device_name);
+            tv_device_mac = (TextView) itemView.findViewById(R.id.item_device_mac);
         }
     }
 

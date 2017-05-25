@@ -4,4 +4,5 @@
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
     <string name="BT_IS_NOT_AVAILABLE">Bluetooth is not available</string>
     <string name="search">Searching...</string>
+    <string name="title_activity_chat">ChatActivity</string>
 </resources>

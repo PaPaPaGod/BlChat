@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:text="1111111111"
-        android:id="@+id/item_device_name"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/device_item_text"
+            android:text="Device Name" />
+        <TextView
+            android:id="@+id/item_device_name"
+            android:layout_marginLeft="26dp"
+            style="@style/device_item_text"
+            android:text="1111111111" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Device Address"
+            style="@style/device_item_text" />
+        <TextView
+            style="@style/device_item_text"
+            android:layout_marginLeft="10dp"
+            android:text="1111111111"
+            android:id="@+id/item_device_mac"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

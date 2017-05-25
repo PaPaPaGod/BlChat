@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BlChat.iml" filepath="$PROJECT_DIR$/BlChat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/newblchat/newblchat.iml" filepath="$PROJECT_DIR$/newblchat/newblchat.iml" />
     </modules>
   </component>
 </project>
